@@ -1,5 +1,5 @@
 
-import "../css/Hero.css"; 
+import "../css/hero.css"; 
 import profileImg from "../assets/erich.jfif"; 
 import { FaFacebook, FaInstagram, FaTwitter } from "react-icons/fa"; 
 
