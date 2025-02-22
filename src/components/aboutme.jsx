@@ -13,7 +13,7 @@ const AboutMe = () => {
           My expertise lies in software development, system troubleshooting, and visual resolution technologies, where I continuously debug challenges and innovate solutions. I enjoy teaching others about technology, sharing knowledge, and fostering growth within the tech community.
         </p>
         <p>
-          Feel free to browse my projects, and if you’d like to work together, don’t hesitate to reach out!
+        I am 4th-year Information Technology student at Western Mindanao State University. I enjoy coding, fixing computer parts, and teaching others about visual resolution. i am also working on a capstone project focused on finding tutors that fit students' needs.
         </p>
       </div>
     </section>
