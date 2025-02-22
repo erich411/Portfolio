@@ -1,20 +1,10 @@
-import "../css/header.css";
-import logo from "../assets/logo.png"; 
+import "../css/Header.css";
+import logo from "../assets/logo.png";                        
 import { useState } from "react";
+import { Link } from "react-router-dom"; 
 
 const Header = () => {
- 
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-
-  const handleScroll = (e, targetId) => {
-    e.preventDefault();
-    const targetElement = document.getElementById(targetId);
-    window.scrollTo({
-      top: targetElement.offsetTop,
-      behavior: 'smooth'
-    });
-  };
-
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
@@ -30,10 +20,11 @@ const Header = () => {
       />
       <nav className={`nav-links ${isMenuOpen ? 'active' : ''}`}>
         <ul>
-          <li><a href="#about" onClick={(e) => handleScroll(e, "about")}>About</a></li>
-          <li><a href="#projects" onClick={(e) => handleScroll(e, "projects")}>Projects</a></li>
-          <li><a href="#blogs" onClick={(e) => handleScroll(e, "blogs")}>Blogs</a></li>
-          <li><a href="#contact" onClick={(e) => handleScroll(e, "contact")}>Contact</a></li>
+        <li><Link to="/">Home</Link></li>
+          <li><Link to="/about">About</Link></li>
+          <li><a href="">Projects</a></li>
+          <li><a href="">Blogs</a></li>
+          <li><a href="">Contact</a></li>
         </ul>
       </nav>
     </header>
