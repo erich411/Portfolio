@@ -1,0 +1,128 @@
+body {
+  overflow-x: hidden;
+}
+
+.experience {
+  border-top: 2px solid black;
+  padding: 60px 20px;
+  background-color: #f5f7fa;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background-attachment: fixed;
+  box-sizing: border-box;
+  width: 100vw;
+  height: 100%vh;
+}
+
+.experience-content {
+  padding: 40px;
+  border-radius: 12px;
+  max-width: 1000px;
+  width: 100%;
+  max-height: 100%;
+  height: 100%;
+  box-sizing: border-box;
+  animation: fadeInUp 1s ease-out;
+  direction: ltr;
+  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+}
+
+.experience-image {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-bottom: 20px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease-in-out;
+}
+
+.experience-image:hover {
+  transform: scale(1.5);
+}
+
+.experience-content h1 {
+  font-size: 2.5rem;
+  color: #2d3e50;
+  text-align: center;
+  margin-bottom: 20px;
+  font-family: 'Montserrat', sans-serif;
+}
+
+.experience-content h2 {
+  font-size: 1.5rem;
+  color: #536f8e;
+  text-align: left;
+  margin-bottom: 20px;
+  font-family: 'Montserrat', sans-serif;
+}
+
+.experience-content p {
+  font-size: 1.2rem;
+  line-height: 1.8;
+  color: #333;
+  text-align: justify;
+  margin-bottom: 20px;
+  font-family: 'Roboto', sans-serif;
+  transition: color 0.3s ease;
+}
+
+.experience-content p:hover {
+  color: #2575fc;
+  transform: scale(1.1);
+}
+
+.experience-content p:last-child {
+  margin-bottom: 0;
+}
+
+.experience-content::after {
+  content: '';
+  display: block;
+  height: 4px;
+  margin-top: 30px;
+  width: 60px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+@keyframes fadeInUp {
+  0% {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (max-width: 768px) {
+  .experience {
+    padding: 40px 10px;
+  }
+
+  .experience-content {
+    width: 90%;
+    padding: 25px;
+  }
+
+  .experience-content h1 {
+    font-size: 2.2rem;
+  }
+
+  .experience-content h2{
+    font-size: 2.2rem;
+  }
+
+  .experience-content p {
+    font-size: 1rem;
+  }
+
+  .experience-image {
+    width: 100px;
+    height: 100px;
+  }
+}
