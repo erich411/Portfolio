@@ -1,128 +1,202 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Montserrat:wght@400;500;600;700&display=swap");
+
 body {
   overflow-x: hidden;
+  font-family: "Poppins", sans-serif;
 }
 
 .experience {
-  border-top: 2px solid black;
-  padding: 60px 20px;
-  background-color: #f5f7fa;
+  padding: 80px 20px;
+  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
   display: flex;
   justify-content: center;
   align-items: center;
   min-height: 100vh;
-  background-attachment: fixed;
-  box-sizing: border-box;
-  width: 100vw;
-  height: 100%vh;
-}
-
-.experience-content {
-  padding: 40px;
-  border-radius: 12px;
-  max-width: 1000px;
   width: 100%;
-  max-height: 100%;
-  height: 100%;
   box-sizing: border-box;
-  animation: fadeInUp 1s ease-out;
-  direction: ltr;
-  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+  position: relative;
+  overflow: hidden;
 }
 
-.experience-image {
-  width: 120px;
-  height: 120px;
-  border-radius: 50%;
-  object-fit: cover;
-  margin-bottom: 20px;
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-  transition: transform 0.3s ease-in-out;
+.experience::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 6px;
+  background: linear-gradient(90deg, #6366f1, #8b5cf6, #ec4899);
 }
 
-.experience-image:hover {
-  transform: scale(1.5);
+.experience-container {
+  max-width: 1200px;
+  width: 100%;
+  padding: 0 20px;
 }
 
-.experience-content h1 {
-  font-size: 2.5rem;
-  color: #2d3e50;
+.experience-header {
   text-align: center;
-  margin-bottom: 20px;
-  font-family: 'Montserrat', sans-serif;
+  margin-bottom: 50px;
 }
 
-.experience-content h2 {
-  font-size: 1.5rem;
-  color: #536f8e;
+.experience-header h1 {
+  font-size: 3rem;
+  font-weight: 700;
+  color: #1e293b;
+  margin-bottom: 15px;
+  font-family: "Montserrat", sans-serif;
+  letter-spacing: -0.5px;
+}
+
+.underline {
+  height: 4px;
+  width: 70px;
+  background: linear-gradient(90deg, #6366f1, #8b5cf6);
+  margin: 0 auto;
+  border-radius: 2px;
+}
+
+.experience-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 40px;
+}
+
+.experience-intro {
+  background-color: white;
+  border-radius: 16px;
+  padding: 40px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+}
+
+.experience-intro p {
+  font-size: 1.1rem;
+  line-height: 1.7;
+  color: #475569;
+  margin-bottom: 20px;
   text-align: left;
-  margin-bottom: 20px;
-  font-family: 'Montserrat', sans-serif;
+  transition: all 0.3s ease;
 }
 
-.experience-content p {
-  font-size: 1.2rem;
-  line-height: 1.8;
-  color: #333;
-  text-align: justify;
-  margin-bottom: 20px;
-  font-family: 'Roboto', sans-serif;
-  transition: color 0.3s ease;
-}
-
-.experience-content p:hover {
-  color: #2575fc;
-  transform: scale(1.1);
-}
-
-.experience-content p:last-child {
+.experience-intro p:last-child {
   margin-bottom: 0;
 }
 
-.experience-content::after {
-  content: '';
-  display: block;
-  height: 4px;
-  margin-top: 30px;
-  width: 60px;
-  margin-left: auto;
-  margin-right: auto;
+.experience-card {
+  background: white;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.08);
+  transition: all 0.3s ease;
+  border-top: 6px solid #6366f1;
 }
 
-@keyframes fadeInUp {
-  0% {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  100% {
-    opacity: 1;
-    transform: translateY(0);
+.card-content {
+  padding: 40px;
+  position: relative;
+}
+
+.card-icon {
+  color: #6366f1;
+  margin-bottom: 20px;
+}
+
+.card-details {
+  margin-bottom: 25px;
+}
+
+.card-details h2 {
+  font-size: 1.6rem;
+  color: #1e293b;
+  font-weight: 600;
+  margin-bottom: 15px;
+  font-family: "Montserrat", sans-serif;
+}
+
+.card-details h3 {
+  font-size: 1.2rem;
+  color: #475569;
+  font-weight: 500;
+  margin-bottom: 10px;
+}
+
+.card-skills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 25px;
+}
+
+.card-skills span {
+  background-color: #f1f5f9;
+  color: #6366f1;
+  padding: 8px 16px;
+  border-radius: 50px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.card-skills span:hover {
+  background-color: #6366f1;
+  color: white;
+}
+
+/* Responsive styles */
+@media (min-width: 768px) {
+  .experience-grid {
+    grid-template-columns: 1fr 1fr;
   }
 }
 
-@media (max-width: 768px) {
+@media (max-width: 767px) {
   .experience {
-    padding: 40px 10px;
+    padding: 60px 15px;
   }
 
-  .experience-content {
-    width: 90%;
+  .experience-header h1 {
+    font-size: 2.4rem;
+  }
+
+  .experience-intro,
+  .card-content {
+    padding: 30px;
+  }
+
+  .card-details h2 {
+    font-size: 1.4rem;
+  }
+
+  .card-details h3 {
+    font-size: 1.1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .experience-header h1 {
+    font-size: 2rem;
+  }
+
+  .experience-intro,
+  .card-content {
     padding: 25px;
   }
 
-  .experience-content h1 {
-    font-size: 2.2rem;
-  }
-
-  .experience-content h2{
-    font-size: 2.2rem;
-  }
-
-  .experience-content p {
+  .experience-intro p {
     font-size: 1rem;
   }
 
-  .experience-image {
-    width: 100px;
-    height: 100px;
+  .card-details h2 {
+    font-size: 1.3rem;
+  }
+
+  .card-details h3 {
+    font-size: 1rem;
+  }
+
+  .card-skills span {
+    font-size: 0.8rem;
+    padding: 6px 12px;
   }
 }

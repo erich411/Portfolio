@@ -1,103 +1,261 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Montserrat:wght@400;500;600;700&display=swap");
+
 body {
-    overflow-x: hidden;
+  overflow-x: hidden;
+  font-family: "Poppins", sans-serif;
+}
+
+.contacts-section {
+  padding: 80px 20px;
+  background: linear-gradient(135deg, #f5f7fa 0%, #e9ecef 100%);
+  display: flex;
+  justify-content: center;
+  min-height: 100vh;
+  width: 100%;
+  box-sizing: border-box;
+  position: relative;
+}
+
+.contacts-section::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 6px;
+  background: linear-gradient(90deg, #805ad5, #6366f1, #4f46e5);
+}
+
+.contacts-container {
+  max-width: 1200px;
+  width: 100%;
+}
+
+.section-header {
+  text-align: center;
+  margin-bottom: 50px;
+}
+
+.section-header h1 {
+  font-size: 3rem;
+  font-weight: 700;
+  color: #1e293b;
+  margin-bottom: 15px;
+  font-family: "Montserrat", sans-serif;
+  letter-spacing: -0.5px;
+}
+
+.header-underline {
+  height: 4px;
+  width: 70px;
+  background: linear-gradient(90deg, #805ad5, #6366f1);
+  margin: 0 auto;
+  border-radius: 2px;
+}
+
+.contact-layout {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 40px;
+}
+
+.contact-info,
+.social-connect {
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+}
+
+.intro-message,
+.availability-card,
+.message-card,
+.contact-form-card {
+  background-color: white;
+  border-radius: 16px;
+  padding: 30px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+  transition: all 0.3s ease;
+}
+
+.intro-message p,
+.message-card p {
+  font-size: 1.1rem;
+  line-height: 1.8;
+  color: #4a5568;
+  margin: 0;
+}
+
+.availability-card h2,
+.message-card h2,
+.social-connect h2,
+.contact-form-card h2 {
+  font-size: 1.6rem;
+  color: #2d3748;
+  font-weight: 600;
+  margin-top: 0;
+  margin-bottom: 20px;
+  font-family: "Montserrat", sans-serif;
+}
+
+.availability-card ul {
+  padding-left: 20px;
+  margin: 0;
+}
+
+.availability-card li {
+  font-size: 1.1rem;
+  line-height: 1.7;
+  color: #4a5568;
+  margin-bottom: 12px;
+}
+
+.availability-card li:last-child {
+  margin-bottom: 0;
+}
+
+.social-icons {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 20px;
+  margin-bottom: 30px;
+}
+
+.icon-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  color: white;
+  text-decoration: none;
+  transition: all 0.3s ease;
+}
+
+.icon-wrapper i {
+  font-size: 24px;
+}
+
+.icon-tooltip {
+  position: absolute;
+  bottom: -40px;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: #2d3748;
+  color: white;
+  padding: 5px 10px;
+  border-radius: 5px;
+  font-size: 12px;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.3s ease;
+  white-space: nowrap;
+}
+
+.icon-wrapper:hover .icon-tooltip {
+  opacity: 1;
+  visibility: visible;
+}
+
+.contact-form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.contact-form input,
+.contact-form textarea {
+  font-family: "Poppins", sans-serif;
+  padding: 12px 16px;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+}
+
+.contact-form input:focus,
+.contact-form textarea:focus {
+  outline: none;
+  border-color: #6366f1;
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
+}
+
+.contact-form button {
+  background-color: #6366f1;
+  color: white;
+  border: none;
+  padding: 14px 24px;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  margin-top: 10px;
+  transition: all 0.3s ease;
+}
+
+/* Responsive styles */
+@media (max-width: 992px) {
+  .contact-layout {
+    grid-template-columns: 1fr;
   }
-  
-  .contacts-section {
-    border-top: 2px solid black;
-    padding: 60px 20px;
-    background-color: #f5f7fa;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 100vh;
-    background-attachment: fixed;
-    box-sizing: border-box;
-    width: 100vw;
-    height: 100%vh;
-  }
-  
-  .contacts-content {
-    padding: 40px;
-    border-radius: 12px;
-    max-width: 1000px;
-    width: 100%;
-    box-sizing: border-box;
-    animation: fadeInUp 1s ease-out;
-    direction: ltr;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  }
-  
-  .contacts-content h1 {
+
+  .section-header h1 {
     font-size: 2.5rem;
-    color: #2d3e50;
-    text-align: center;
-    margin-bottom: 20px;
-    font-family: 'Montserrat', sans-serif;
   }
-  
-  .contacts-content p {
-    font-size: 1.2rem;
-    line-height: 1.8;
-    color: #333;
-    text-align: justify;
-    margin-bottom: 20px;
-    font-family: 'Roboto', sans-serif;
-    transition: color 0.3s ease;
+}
+
+@media (max-width: 768px) {
+  .contacts-section {
+    padding: 60px 15px;
   }
-  
-  .contacts-content p:hover {
-    color: #2575fc;
-    transform: scale(1.1);
+
+  .section-header h1 {
+    font-size: 2.2rem;
   }
-  
-  .contacts-content p:last-child {
-    margin-bottom: 0;
+
+  .intro-message,
+  .availability-card,
+  .message-card,
+  .contact-form-card {
+    padding: 25px;
   }
-  
-  .contacts-content::after {
-    content: '';
-    display: block;
-    height: 4px;
-    margin-top: 30px;
-    width: 60px;
-    margin-left: auto;
-    margin-right: auto;
+}
+
+@media (max-width: 480px) {
+  .section-header h1 {
+    font-size: 2rem;
   }
-  
-  @keyframes fadeInUp {
-    0% {
-      opacity: 0;
-      transform: translateY(20px);
-    }
-    100% {
-      opacity: 1;
-      transform: translateY(0);
-    }
+
+  .intro-message p,
+  .message-card p,
+  .availability-card li {
+    font-size: 1rem;
   }
-  
-  @media (max-width: 768px) {
-    .contacts-section {
-      padding: 40px 10px;
-    }
-  
-    .contacts-content {
-      width: 90%;
-      padding: 25px;
-    }
-  
-    .contacts-content h1 {
-      font-size: 2.2rem;
-    }
-  
-    .contacts-content p {
-      font-size: 1rem;
-    }
+
+  .availability-card h2,
+  .message-card h2,
+  .social-connect h2,
+  .contact-form-card h2 {
+    font-size: 1.4rem;
   }
-  
-  .generalicon {
-    font-size: 100px;
-    text-align: center;
-    margin: 12px;
+
+  .social-icons {
+    gap: 15px;
   }
+
+  .icon-wrapper {
+    width: 50px;
+    height: 50px;
+  }
+
+  .icon-wrapper i {
+    font-size: 20px;
+  }
+}
