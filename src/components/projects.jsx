@@ -28,7 +28,7 @@ const Projects = () => {
       image: cal,
       techStack: ["ReactJS"],
       liveLink: "https://sci-cal-rampola-erich.netlify.app/",
-      githubLink: "#",
+      githubLink: "https://github.com/Novi-25/Scientific-calculator.git",
       featured: true,
     },
     {

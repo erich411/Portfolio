@@ -1,5 +1,5 @@
-import { motion } from "framer-motion";
-import { useRef } from "react";
+import { motion, useReducedMotion } from "framer-motion";
+import { useRef, useEffect, useState } from "react";
 import "../css/aboutme.css";
 import {
   FaCode,
@@ -12,58 +12,157 @@ import {
 
 const AboutMe = () => {
   const constraintsRef = useRef(null);
+  // Detect if user prefers reduced motion
+  const prefersReducedMotion = useReducedMotion();
+  // State to detect if we're on mobile
+  const [isMobile, setIsMobile] = useState(false);
 
-  // Animation variants
-  const sectionVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.2,
-        delayChildren: 0.3,
-      },
-    },
+  // Check if we're on mobile device on component mount
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth <= 768);
+    };
+    
+    // Run once on component mount
+    checkMobile();
+    
+    // Add event listener for window resize
+    window.addEventListener("resize", checkMobile);
+    
+    // Clean up
+    return () => window.removeEventListener("resize", checkMobile);
+  }, []);
+
+  // Simplified animation variants for mobile
+  const shouldReduceMotion = prefersReducedMotion || isMobile;
+
+  // Animation variants with conditional logic for mobile
+  const sectionVariants = shouldReduceMotion 
+    ? {
+        hidden: { opacity: 0 },
+        visible: { opacity: 1 }
+      }
+    : {
+        hidden: { opacity: 0 },
+        visible: {
+          opacity: 1,
+          transition: {
+            staggerChildren: 0.2,
+            delayChildren: 0.3,
+          },
+        },
+      };
+
+  const itemVariants = shouldReduceMotion
+    ? {
+        hidden: { opacity: 0 },
+        visible: { opacity: 1 }
+      }
+    : {
+        hidden: { y: 20, opacity: 0 },
+        visible: {
+          y: 0,
+          opacity: 1,
+          transition: { type: "spring", stiffness: 100 },
+        },
+      };
+
+  const skillVariants = shouldReduceMotion
+    ? {
+        hidden: { opacity: 0 },
+        visible: { opacity: 1 },
+        hover: { scale: 1.02 }
+      }
+    : {
+        hidden: { scale: 0.9, opacity: 0 },
+        visible: {
+          scale: 1,
+          opacity: 1,
+          transition: { type: "spring", stiffness: 300 },
+        },
+        hover: {
+          scale: 1.05,
+          boxShadow: "0px 8px 15px rgba(0, 0, 0, 0.1)",
+          transition: { type: "spring", stiffness: 400 },
+        },
+      };
+
+  const titleVariants = shouldReduceMotion
+    ? {
+        hidden: { opacity: 0 },
+        visible: { opacity: 1 }
+      }
+    : {
+        hidden: { opacity: 0, x: -50 },
+        visible: {
+          opacity: 1,
+          x: 0,
+          transition: { type: "spring", stiffness: 100 },
+        },
+      };
+
+  // Conditionally render background animations
+  const renderBackgroundElements = () => {
+    if (shouldReduceMotion) {
+      return (
+        <div className="background-elements">
+          <div className="bg-element element-1"></div>
+          <div className="bg-element element-2"></div>
+          <div className="bg-element element-3"></div>
+        </div>
+      );
+    }
+
+    return (
+      <div className="background-elements">
+        <motion.div
+          className="bg-element element-1"
+          animate={{
+            y: [0, -15, 0],
+            rotate: [0, 5, 0],
+          }}
+          transition={{
+            duration: 6,
+            repeat: Infinity,
+            repeatType: "reverse",
+          }}
+        ></motion.div>
+        <motion.div
+          className="bg-element element-2"
+          animate={{
+            x: [0, 15, 0],
+            rotate: [0, -5, 0],
+          }}
+          transition={{
+            duration: 8,
+            repeat: Infinity,
+            repeatType: "reverse",
+          }}
+        ></motion.div>
+        <motion.div
+          className="bg-element element-3"
+          animate={{
+            y: [0, 20, 0],
+            rotate: [0, 10, 0],
+          }}
+          transition={{
+            duration: 10,
+            repeat: Infinity,
+            repeatType: "reverse",
+          }}
+        ></motion.div>
+      </div>
+    );
   };
 
-  const itemVariants = {
-    hidden: { y: 20, opacity: 0 },
-    visible: {
-      y: 0,
-      opacity: 1,
-      transition: { type: "spring", stiffness: 100 },
-    },
-  };
-
-  const skillVariants = {
-    hidden: { scale: 0.9, opacity: 0 },
-    visible: {
-      scale: 1,
-      opacity: 1,
-      transition: { type: "spring", stiffness: 300 },
-    },
-    hover: {
-      scale: 1.05,
-      boxShadow: "0px 8px 15px rgba(0, 0, 0, 0.1)",
-      transition: { type: "spring", stiffness: 400 },
-    },
-  };
-
-  const titleVariants = {
-    hidden: { opacity: 0, x: -50 },
-    visible: {
-      opacity: 1,
-      x: 0,
-      transition: { type: "spring", stiffness: 100 },
-    },
-  };
-
+  // Optimized rendering with lazy loading using IntersectionObserver via framer-motion's viewport prop
   return (
     <motion.section
       className="about-me"
       id="about"
       initial="hidden"
       whileInView="visible"
-      viewport={{ once: true, amount: 0.2 }}
+      viewport={{ once: true, amount: 0.1 }}
       variants={sectionVariants}
     >
       <div className="about-container">
@@ -90,7 +189,7 @@ const AboutMe = () => {
                 <motion.div
                   className="floating-icon"
                   ref={constraintsRef}
-                  whileHover={{ rotate: [0, -10, 10, -5, 0] }}
+                  whileHover={!shouldReduceMotion ? { rotate: [0, -10, 10, -5, 0] } : {}}
                 >
                   <FaRegLightbulb />
                 </motion.div>
@@ -109,7 +208,7 @@ const AboutMe = () => {
               <div className="card-icon">
                 <motion.div
                   className="floating-icon"
-                  whileHover={{ rotate: [0, -10, 10, -5, 0] }}
+                  whileHover={!shouldReduceMotion ? { rotate: [0, -10, 10, -5, 0] } : {}}
                 >
                   <FaAward />
                 </motion.div>
@@ -182,21 +281,21 @@ const AboutMe = () => {
               <h3>Career Goals</h3>
               <ul className="goal-list">
                 <motion.li
-                  whileHover={{ scale: 1.03, x: 5 }}
-                  transition={{ type: "spring", stiffness: 300 }}
+                  whileHover={!shouldReduceMotion ? { scale: 1.03, x: 5 } : {}}
+                  transition={!shouldReduceMotion ? { type: "spring", stiffness: 300 } : {}}
                 >
                   Become a highly skilled Software Developer or IT Specialist
                 </motion.li>
                 <motion.li
-                  whileHover={{ scale: 1.03, x: 5 }}
-                  transition={{ type: "spring", stiffness: 300 }}
+                  whileHover={!shouldReduceMotion ? { scale: 1.03, x: 5 } : {}}
+                  transition={!shouldReduceMotion ? { type: "spring", stiffness: 300 } : {}}
                 >
                   Build tech solutions that simplify learning and improve
                   accessibility
                 </motion.li>
                 <motion.li
-                  whileHover={{ scale: 1.03, x: 5 }}
-                  transition={{ type: "spring", stiffness: 300 }}
+                  whileHover={!shouldReduceMotion ? { scale: 1.03, x: 5 } : {}}
+                  transition={!shouldReduceMotion ? { type: "spring", stiffness: 300 } : {}}
                 >
                   Currently developing a capstone project for matching tutors
                   with students' needs
@@ -208,22 +307,22 @@ const AboutMe = () => {
               <h3>Personal Touch</h3>
               <ul className="personal-list">
                 <motion.li
-                  whileHover={{ scale: 1.03, x: 5 }}
-                  transition={{ type: "spring", stiffness: 300 }}
+                  whileHover={!shouldReduceMotion ? { scale: 1.03, x: 5 } : {}}
+                  transition={!shouldReduceMotion ? { type: "spring", stiffness: 300 } : {}}
                 >
                   <strong>Fun Fact:</strong> I enjoy fixing computer parts in my
                   free time
                 </motion.li>
                 <motion.li
-                  whileHover={{ scale: 1.03, x: 5 }}
-                  transition={{ type: "spring", stiffness: 300 }}
+                  whileHover={!shouldReduceMotion ? { scale: 1.03, x: 5 } : {}}
+                  transition={!shouldReduceMotion ? { type: "spring", stiffness: 300 } : {}}
                 >
                   <strong>Hobbies:</strong> Coding, teaching about visual
                   resolution, and exploring tech innovations
                 </motion.li>
                 <motion.li
-                  whileHover={{ scale: 1.03, x: 5 }}
-                  transition={{ type: "spring", stiffness: 300 }}
+                  whileHover={!shouldReduceMotion ? { scale: 1.03, x: 5 } : {}}
+                  transition={!shouldReduceMotion ? { type: "spring", stiffness: 300 } : {}}
                 >
                   <strong>Life Experience:</strong> Every challenge is an
                   opportunity to grow and learn something new
@@ -231,49 +330,11 @@ const AboutMe = () => {
               </ul>
             </motion.div>
           </div>
-
         </div>
       </div>
 
-      {/* Animated background elements */}
-      <div className="background-elements">
-        <motion.div
-          className="bg-element element-1"
-          animate={{
-            y: [0, -15, 0],
-            rotate: [0, 5, 0],
-          }}
-          transition={{
-            duration: 6,
-            repeat: Infinity,
-            repeatType: "reverse",
-          }}
-        ></motion.div>
-        <motion.div
-          className="bg-element element-2"
-          animate={{
-            x: [0, 15, 0],
-            rotate: [0, -5, 0],
-          }}
-          transition={{
-            duration: 8,
-            repeat: Infinity,
-            repeatType: "reverse",
-          }}
-        ></motion.div>
-        <motion.div
-          className="bg-element element-3"
-          animate={{
-            y: [0, 20, 0],
-            rotate: [0, 10, 0],
-          }}
-          transition={{
-            duration: 10,
-            repeat: Infinity,
-            repeatType: "reverse",
-          }}
-        ></motion.div>
-      </div>
+      {/* Conditionally render animated background elements */}
+      {renderBackgroundElements()}
     </motion.section>
   );
 };

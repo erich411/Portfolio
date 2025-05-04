@@ -1,6 +1,6 @@
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import "../css/blogs.css";
-import { useState } from "react";
+import { useState, useEffect, useCallback, memo, lazy, Suspense } from "react";
 import blog1 from "../assets/1.png";
 import blog2 from "../assets/2.png";
 import blog3 from "../assets/pandemic.jpg";
@@ -9,33 +9,132 @@ import blog5 from "../assets/5.png";
 import blog6 from "../assets/6.jpg";
 import blog7 from "../assets/7.png";
 
+// Memoized blog card component to prevent unnecessary re-renders
+const BlogCard = memo(({ post, openModal, variants }) => {
+  return (
+    <motion.div
+      className="blog-card"
+      variants={variants}
+      whileHover={{
+        scale: 1.03,
+        transition: { duration: 0.3 },
+        boxShadow: "0 20px 40px rgba(0, 0, 0, 0.12)",
+      }}
+    >
+      <div className="card-image">
+        <img 
+          src={post.image} 
+          alt={post.title}
+          loading="lazy" // Lazy load images
+          width="400" 
+          height="200"
+        />
+        <motion.div
+          className="category-badge"
+          whileHover={{ scale: 1.1 }}
+        >
+          {post.category}
+        </motion.div>
+      </div>
+      <div className="card-content">
+        <div className="post-date">{post.date}</div>
+        <h2>{post.title}</h2>
+        <motion.button
+          className="read-more"
+          whileHover={{ scale: 1.05, backgroundColor: "#4f46e5" }}
+          whileTap={{ scale: 0.95 }}
+          onClick={() => openModal(post)}
+        >
+          Read
+        </motion.button>
+      </div>
+    </motion.div>
+  );
+});
+
+// Modal component extracted and can be lazy loaded
+const BlogModal = ({ isOpen, post, onClose }) => {
+  if (!isOpen) return null;
+  
+  return (
+    <motion.div 
+      className="modal-overlay" 
+      onClick={onClose}
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+    >
+      <motion.div 
+        className="modal-container" 
+        onClick={(e) => e.stopPropagation()}
+        initial={{ y: 50, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        exit={{ y: 50, opacity: 0 }}
+      >
+        <div className="modal-header">
+          <h2>{post?.title}</h2>
+          <button className="close-modal" onClick={onClose}>
+            ×
+          </button>
+        </div>
+        <div className="modal-content">
+          <h3>{post?.content.heading}</h3>
+          <ul className="content-list">
+            {post?.content.points.map((point, index) => (
+              <li key={index}>{point}</li>
+            ))}
+          </ul>
+        </div>
+      </motion.div>
+    </motion.div>
+  );
+};
+
 const Blogs = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [activePost, setActivePost] = useState(null);
+  const [isMobile, setIsMobile] = useState(false);
 
+  // Check for mobile device
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth <= 768);
+    };
+    
+    // Initial check
+    checkMobile();
+    
+    // Add event listener
+    window.addEventListener('resize', checkMobile);
+    
+    // Cleanup
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
+
+  // Simplified animations for mobile
   const containerVariants = {
     hidden: { opacity: 0 },
     visible: {
       opacity: 1,
       transition: {
-        staggerChildren: 0.3,
-        delayChildren: 0.2,
+        staggerChildren: isMobile ? 0.1 : 0.3,
+        delayChildren: 0.1,
       },
     },
   };
 
   const itemVariants = {
-    hidden: { y: 30, opacity: 0 },
+    hidden: { y: 20, opacity: 0 },
     visible: {
       y: 0,
       opacity: 1,
-      transition: { duration: 0.6, ease: "easeOut" },
+      transition: { duration: isMobile ? 0.3 : 0.6, ease: "easeOut" },
     },
   };
 
   const fadeInVariants = {
     hidden: { opacity: 0 },
-    visible: { opacity: 1, transition: { duration: 0.8 } },
+    visible: { opacity: 1, transition: { duration: 0.5 } },
   };
 
   const blogPosts = [
@@ -157,19 +256,22 @@ const Blogs = () => {
     },
   ];
 
-  const openModal = (post) => {
+  const openModal = useCallback((post) => {
     setActivePost(post);
     setIsModalOpen(true);
     // Prevent scrolling when modal is open
     document.body.style.overflow = "hidden";
-  };
+  }, []);
 
-  const closeModal = () => {
+  const closeModal = useCallback(() => {
     setIsModalOpen(false);
-    setActivePost(null);
+    // Add a small delay before removing the post to allow exit animation
+    setTimeout(() => {
+      setActivePost(null);
+    }, 300);
     // Re-enable scrolling when modal is closed
     document.body.style.overflow = "auto";
-  };
+  }, []);
 
   return (
     <section className="blogs" id="blogs">
@@ -177,7 +279,7 @@ const Blogs = () => {
         className="blogs-container"
         initial="hidden"
         whileInView="visible"
-        viewport={{ once: true, amount: 0.2 }}
+        viewport={{ once: true, amount: 0.1 }}
         variants={containerVariants}
       >
         <motion.div className="blogs-header" variants={itemVariants}>
@@ -188,7 +290,7 @@ const Blogs = () => {
         <motion.div className="blogs-intro" variants={itemVariants}>
           <motion.p
             variants={itemVariants}
-            whileHover={{ scale: 1.02, transition: { duration: 0.2 } }}
+            whileHover={!isMobile ? { scale: 1.02, transition: { duration: 0.2 } } : {}}
           >
             As a student of Information Technology, my software engineering
             journey has been filled with challenges, growth, and major
@@ -202,45 +304,14 @@ const Blogs = () => {
 
         <motion.div className="blogs-grid" variants={fadeInVariants}>
           {blogPosts.map((post) => (
-            <motion.div
-              key={post.id}
-              className="blog-card"
-              variants={itemVariants}
-              whileHover={{
-                scale: 1.03,
-                transition: { duration: 0.3 },
-                boxShadow: "0 20px 40px rgba(0, 0, 0, 0.12)",
-              }}
-            >
-              <div className="card-image">
-                <img src={post.image} alt={post.title} />
-                <motion.div
-                  className="category-badge"
-                  whileHover={{ scale: 1.1 }}
-                >
-                  {post.category}
-                </motion.div>
-              </div>
-              <div className="card-content">
-                <div className="post-date">{post.date}</div>
-                <h2>{post.title}</h2>
-                <motion.button
-                  className="read-more"
-                  whileHover={{ scale: 1.05, backgroundColor: "#4f46e5" }}
-                  whileTap={{ scale: 0.95 }}
-                  onClick={() => openModal(post)}
-                >
-                  Read
-                </motion.button>
-              </div>
-            </motion.div>
+            <BlogCard key={post.id} post={post} openModal={openModal} variants={itemVariants} />
           ))}
         </motion.div>
 
         <motion.div className="blogs-intro" variants={itemVariants}>
           <motion.p
             variants={itemVariants}
-            whileHover={{ scale: 1.02, transition: { duration: 0.2 } }}
+            whileHover={!isMobile ? { scale: 1.02, transition: { duration: 0.2 } } : {}}
           >
             This journey has taught me not just how to code, but how to think,
             adapt, and build with purpose. Whether it was learning Assembly
@@ -251,27 +322,10 @@ const Blogs = () => {
         </motion.div>
       </motion.div>
 
-      {/* Modal */}
-      {isModalOpen && (
-        <div className="modal-overlay" onClick={closeModal}>
-          <div className="modal-container" onClick={(e) => e.stopPropagation()}>
-            <div className="modal-header">
-              <h2>{activePost?.title}</h2>
-              <button className="close-modal" onClick={closeModal}>
-                ×
-              </button>
-            </div>
-            <div className="modal-content">
-              <h3>{activePost?.content.heading}</h3>
-              <ul className="content-list">
-                {activePost?.content.points.map((point, index) => (
-                  <li key={index}>{point}</li>
-                ))}
-              </ul>
-            </div>
-          </div>
-        </div>
-      )}
+      {/* Modal with AnimatePresence for smooth transitions */}
+      <AnimatePresence>
+        {isModalOpen && <BlogModal isOpen={isModalOpen} post={activePost} onClose={closeModal} />}
+      </AnimatePresence>
     </section>
   );
 };
