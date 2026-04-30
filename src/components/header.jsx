@@ -1,28 +1,43 @@
 import { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, NavLink, useLocation } from "react-router-dom";
 import "../css/header.css";
 import logo from "../assets/logo.png";
+
+const navItems = [
+  { to: "/", label: "Home" },
+  { to: "/about", label: "About" },
+  { to: "/experience", label: "Experience" },
+  { to: "/projects", label: "Projects" },
+  { to: "/blogs", label: "Blog" },
+  { to: "/contacts", label: "Contact" },
+];
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const location = useLocation();
 
-  // Handle scroll effect for transparent to solid header
   useEffect(() => {
     const handleScroll = () => {
-      if (window.scrollY > 50) {
-        setScrolled(true);
-      } else {
-        setScrolled(false);
-      }
+      setScrolled(window.scrollY > 24);
     };
 
+    handleScroll();
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
+  useEffect(() => {
+    setIsMenuOpen(false);
+  }, [location.pathname]);
+
+  useEffect(() => {
+    document.body.classList.toggle("menu-open", isMenuOpen);
+    return () => document.body.classList.remove("menu-open");
+  }, [isMenuOpen]);
+
   const toggleMenu = () => {
-    setIsMenuOpen(!isMenuOpen);
+    setIsMenuOpen((open) => !open);
   };
 
   return (
@@ -39,20 +54,27 @@ const Header = () => {
           className={`hamburger ${isMenuOpen ? "active" : ""}`} 
           onClick={toggleMenu}
           aria-label="Toggle navigation menu"
+          aria-expanded={isMenuOpen}
+          aria-controls="primary-navigation"
         >
           <span></span>
           <span></span>
           <span></span>
         </button>
 
-        <nav className={`nav-links ${isMenuOpen ? "active" : ""}`}>
+        <nav id="primary-navigation" className={`nav-links ${isMenuOpen ? "active" : ""}`}>
           <ul>
-            <li><Link to="/" onClick={() => setIsMenuOpen(false)}>Home</Link></li>
-            <li><Link to="/about" onClick={() => setIsMenuOpen(false)}>About</Link></li>
-            <li><Link to="/experience" onClick={() => setIsMenuOpen(false)}>Experience</Link></li>
-            <li><Link to="/projects" onClick={() => setIsMenuOpen(false)}>Projects</Link></li>
-            <li><Link to="/blogs" onClick={() => setIsMenuOpen(false)}>Blog</Link></li>
-            <li><Link to="/contacts" onClick={() => setIsMenuOpen(false)}>Contact</Link></li>
+            {navItems.map((item) => (
+              <li key={item.to}>
+                <NavLink
+                  to={item.to}
+                  end={item.to === "/"}
+                  className={({ isActive }) => (isActive ? "active-link" : undefined)}
+                >
+                  {item.label}
+                </NavLink>
+              </li>
+            ))}
           </ul>
         </nav>
       </div>

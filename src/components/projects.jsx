@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { motion } from "framer-motion";
 import "../css/projects.css";
 import poke from "../assets/pokemon.png";
@@ -9,15 +8,13 @@ import ecom from "../assets/4.jpg"
 import app from "../assets/5.png";
 
 const Projects = () => {
-  const [selectedCategory, setSelectedCategory] = useState("all");
-
-  // Sample project data - replace with your actual projects
   const projects = [
     {
       id: 1,
       title: "POKE BATTLE",
       image: poke,
       techStack: ["ReactJS"],
+      description: "A responsive Pokemon battle experience built with React.",
       liveLink: "https://rampola-erich-pokemon-app.netlify.app/",
       githubLink: "https://github.com/erich411/pokemon-app.git",
       featured: true,
@@ -27,6 +24,7 @@ const Projects = () => {
       title: "ReactJS Calculator",
       image: cal,
       techStack: ["ReactJS"],
+      description: "A scientific calculator focused on clear inputs and fast interactions.",
       liveLink: "https://sci-cal-rampola-erich.netlify.app/",
       githubLink: "https://github.com/Novi-25/Scientific-calculator.git",
       featured: true,
@@ -36,6 +34,7 @@ const Projects = () => {
       title: "Software Engineering Project",
       image: se,
       techStack: ["HTML", "CSS", "JavaScript", "PHP"],
+      description: "A school software engineering project covering planning, UI, and backend logic.",
       liveLink: "#",
       githubLink: "#",
       featured: false,
@@ -45,6 +44,7 @@ const Projects = () => {
       title: "Tutoria: Finding the Right Tutor",
       image: caps,
       techStack: ["HTML", "CSS", "JavaScript", "Django"],
+      description: "A capstone concept for matching students with tutors based on learning needs.",
       liveLink: "#",
       githubLink: "#",
       featured: false,
@@ -54,6 +54,7 @@ const Projects = () => {
       title: "E-commerce Project",
       image: ecom,
       techStack: ["HTML", "CSS", "JavaScript", "PHP"],
+      description: "An e-commerce build with product, cart, and backend workflow practice.",
       liveLink: "#",
       githubLink: "#",
       featured: false,
@@ -63,13 +64,13 @@ const Projects = () => {
       title: "Application Development",
       image: app,
       techStack: ["HTML", "CSS", "JavaScript", "Django"],
+      description: "Application development work focused on responsive screens and web logic.",
       liveLink: "#",
       githubLink: "#",
       featured: false,
     },
   ];
 
-  // Animation variants
   const containerVariants = {
     hidden: { opacity: 0 },
     visible: {
@@ -90,26 +91,6 @@ const Projects = () => {
     },
   };
 
-  const filterVariants = {
-    selected: {
-      backgroundColor: "#6366f1",
-      color: "white",
-      scale: 1.05,
-    },
-    notSelected: {
-      backgroundColor: "white",
-      color: "#4a5568",
-      scale: 1,
-    },
-  };
-
-  // Filter projects based on selected category
-  const filteredProjects =
-    selectedCategory === "all"
-      ? projects
-      : projects.filter((project) => project.category === selectedCategory);
-
-  // Filter projects by featured status for the featured section
   const featuredProjects = projects.filter((project) => project.featured);
 
   return (
@@ -125,13 +106,12 @@ const Projects = () => {
           <h1>My Projects</h1>
           <div className="header-underline"></div>
           <p className="section-intro">
-            Here are some of the projects I've worked on during my journey as a
+            Here are some of the projects I have worked on during my journey as a
             software developer. Each project represents different skills and
-            technologies I've mastered along the way.
+            technologies I have practiced along the way.
           </p>
         </motion.div>
 
-        {/* Featured Projects */}
         <motion.div className="featured-projects" variants={itemVariants}>
           <h2>Featured Work</h2>
           <div className="featured-grid">
@@ -184,8 +164,8 @@ const Projects = () => {
                         className="tech-tag"
                         whileHover={{
                           scale: 1.1,
-                          backgroundColor: "#6366f1",
-                          color: "white",
+                          backgroundColor: "#f97316",
+                          color: "#171914",
                         }}
                       >
                         {tech}
@@ -198,15 +178,12 @@ const Projects = () => {
           </div>
         </motion.div>
 
-        {/* Project Filters */}
         <motion.div className="project-filters" variants={itemVariants}>
           <h2>All Projects</h2>
-          
         </motion.div>
 
-        {/* Projects Grid */}
         <motion.div className="projects-grid" variants={containerVariants}>
-          {filteredProjects.map((project) => (
+          {projects.map((project) => (
             <motion.div
               key={project.id}
               className="project-card"
@@ -238,8 +215,8 @@ const Projects = () => {
                       className="tech-tag"
                       whileHover={{
                         scale: 1.1,
-                        backgroundColor: "#6366f1",
-                        color: "white",
+                        backgroundColor: "#f97316",
+                        color: "#171914",
                       }}
                     >
                       {tech}
@@ -251,7 +228,7 @@ const Projects = () => {
                     href={project.liveLink}
                     target="_blank"
                     rel="noopener noreferrer"
-                    whileHover={{ scale: 1.05, backgroundColor: "#4f46e5" }}
+                    whileHover={{ scale: 1.05, backgroundColor: "#0f766e" }}
                     whileTap={{ scale: 0.98 }}
                   >
                     <i className="fa-solid fa-arrow-up-right-from-square"></i>{" "}
@@ -273,7 +250,6 @@ const Projects = () => {
           ))}
         </motion.div>
 
-        
       </motion.div>
     </section>
   );

@@ -2,6 +2,10 @@ import { motion } from "framer-motion";
 import "../css/contacts.css";
 
 const Contacts = () => {
+  const handleSubmit = (event) => {
+    event.preventDefault();
+  };
+
   const containerVariants = {
     hidden: { opacity: 0 },
     visible: {
@@ -50,25 +54,25 @@ const Contacts = () => {
       platform: "Facebook",
       icon: "fa-brands fa-facebook",
       link: "https://www.facebook.com/tiffa.lockhart.3114/",
-      color: "#1877F2",
+      color: "#0f766e",
     },
     {
       platform: "Twitter / X",
       icon: "fa-brands fa-x-twitter",
       link: "https://x.com/Remyuy12",
-      color: "#000000",
+      color: "#171914",
     },
     {
       platform: "Instagram",
       icon: "fa-brands fa-instagram",
       link: "https://www.instagram.com/erichuyramos/",
-      color: "#E4405F",
+      color: "#f97316",
     },
     {
       platform: "Email",
       icon: "fa-regular fa-envelope",
       link: "mailto:erichramos9@gmail.com",
-      color: "#EA4335",
+      color: "#7c3aed",
     },
   ];
 
@@ -94,7 +98,7 @@ const Contacts = () => {
               whileHover="hover"
             >
               <motion.p variants={itemVariants}>
-                Hi! I'm Erich, feel free to reach out if you want to collaborate
+                Hi! I am Erich, feel free to reach out if you want to collaborate
                 or discuss anything tech-related.
               </motion.p>
             </motion.div>
@@ -121,10 +125,10 @@ const Contacts = () => {
               variants={itemVariants}
               whileHover="hover"
             >
-              <h2>Let's Connect</h2>
+              <h2>Let us Connect</h2>
               <motion.p variants={itemVariants}>
-                Whether you're a fellow student, developer, or just someone
-                interested in technology, I'd love to connect and share ideas!
+                Whether you are a fellow student, developer, or just someone
+                interested in technology, I would love to connect and share ideas!
               </motion.p>
             </motion.div>
           </motion.div>
@@ -157,7 +161,7 @@ const Contacts = () => {
               whileHover="hover"
             >
               <h2>Send Me a Message</h2>
-              <form className="contact-form">
+              <form className="contact-form" onSubmit={handleSubmit}>
                 <div className="form-group">
                   <motion.input
                     whileFocus={{ scale: 1.02 }}
@@ -184,7 +188,7 @@ const Contacts = () => {
                 </div>
                 <motion.button
                   type="submit"
-                  whileHover={{ scale: 1.05, backgroundColor: "#3182CE" }}
+                  whileHover={{ scale: 1.05, backgroundColor: "#0f766e" }}
                   whileTap={{ scale: 0.98 }}
                 >
                   Send Message

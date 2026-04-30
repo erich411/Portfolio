@@ -1,6 +1,6 @@
 import { motion, AnimatePresence } from "framer-motion";
 import "../css/blogs.css";
-import { useState, useEffect, useCallback, memo, lazy, Suspense } from "react";
+import { useState, useEffect, useCallback, memo } from "react";
 import blog1 from "../assets/1.png";
 import blog2 from "../assets/2.png";
 import blog3 from "../assets/pandemic.jpg";
@@ -10,7 +10,7 @@ import blog6 from "../assets/6.jpg";
 import blog7 from "../assets/7.png";
 
 // Memoized blog card component to prevent unnecessary re-renders
-const BlogCard = memo(({ post, openModal, variants }) => {
+const BlogCard = memo(function BlogCard({ post, openModal, variants }) {
   return (
     <motion.div
       className="blog-card"
@@ -25,7 +25,7 @@ const BlogCard = memo(({ post, openModal, variants }) => {
         <img 
           src={post.image} 
           alt={post.title}
-          loading="lazy" // Lazy load images
+          loading="lazy"
           width="400" 
           height="200"
         />
@@ -41,7 +41,7 @@ const BlogCard = memo(({ post, openModal, variants }) => {
         <h2>{post.title}</h2>
         <motion.button
           className="read-more"
-          whileHover={{ scale: 1.05, backgroundColor: "#4f46e5" }}
+          whileHover={{ scale: 1.05, backgroundColor: "#0f766e" }}
           whileTap={{ scale: 0.95 }}
           onClick={() => openModal(post)}
         >
@@ -52,7 +52,6 @@ const BlogCard = memo(({ post, openModal, variants }) => {
   );
 });
 
-// Modal component extracted and can be lazy loaded
 const BlogModal = ({ isOpen, post, onClose }) => {
   if (!isOpen) return null;
   
@@ -74,7 +73,7 @@ const BlogModal = ({ isOpen, post, onClose }) => {
         <div className="modal-header">
           <h2>{post?.title}</h2>
           <button className="close-modal" onClick={onClose}>
-            ×
+            &times;
           </button>
         </div>
         <div className="modal-content">
@@ -161,7 +160,7 @@ const Blogs = () => {
       category: "Blog 2",
       image: blog2,
       content: {
-        heading: '"TUTORIA" — Finding the Right Tutor',
+        heading: '"TUTORIA" - Finding the Right Tutor',
         points: [
           "Developed a web app to match students with tutors based on purpose and preference.",
           "Features included real-time chat, profile ratings, and scheduling.",
@@ -211,7 +210,7 @@ const Blogs = () => {
       content: {
         heading: "Application Development Highlights",
         points: [
-          "Created a mobile-friendly Pokédex app using React and PokéAPI.",
+          "Created a mobile-friendly Pokedex app using React and PokeAPI.",
           "Designed and implemented CRUD applications using Firebase and Node.js.",
           "Explored Android app development using Java and XML in Android Studio.",
           "Focused on responsive design and performance optimization.",
@@ -240,17 +239,17 @@ const Blogs = () => {
       category: "Blog 7",
       image: blog7,
       content: {
-        heading: "My Very Last Portfolio — A Summary of My Work",
+        heading: "My Very Last Portfolio - A Summary of My Work",
         points: [
-          'Capstone Project – "TutorMatch": Matchmaking platform for students and tutors.',
-          "E-commerce Website – Fully functional shopping platform with backend logic.",
-          "Pandemic-Era Adaptations – Transition to remote learning and tech reliance.",
-          "Pokédex App – Interactive battle app using PokéAPI (React + JSON Server)",
-          "Assembly Language Programs – Arithmetic, loops, and conditionals in low-level code.",
-          "Android App Project – Basic mobile utilities and UI features.",
-          "Design Portfolio – Includes UI mockups, wireframes, and prototypes (Figma).",
-          "GitHub Repository – Hosted source codes, commits, and documentation of all major projects.",
-          "Personal Website (Portfolio) – Final showcase with links to live projects and demos.",
+          'Capstone Project - "TutorMatch": Matchmaking platform for students and tutors.',
+          "E-commerce Website - Fully functional shopping platform with backend logic.",
+          "Pandemic-Era Adaptations - Transition to remote learning and tech reliance.",
+          "Pokedex App - Interactive battle app using PokeAPI (React + JSON Server)",
+          "Assembly Language Programs - Arithmetic, loops, and conditionals in low-level code.",
+          "Android App Project - Basic mobile utilities and UI features.",
+          "Design Portfolio - Includes UI mockups, wireframes, and prototypes (Figma).",
+          "GitHub Repository - Hosted source codes, commits, and documentation of all major projects.",
+          "Personal Website (Portfolio) - Final showcase with links to live projects and demos.",
         ],
       },
     },
@@ -259,18 +258,19 @@ const Blogs = () => {
   const openModal = useCallback((post) => {
     setActivePost(post);
     setIsModalOpen(true);
-    // Prevent scrolling when modal is open
-    document.body.style.overflow = "hidden";
+    document.body.classList.add("modal-open");
   }, []);
 
   const closeModal = useCallback(() => {
     setIsModalOpen(false);
-    // Add a small delay before removing the post to allow exit animation
     setTimeout(() => {
       setActivePost(null);
     }, 300);
-    // Re-enable scrolling when modal is closed
-    document.body.style.overflow = "auto";
+    document.body.classList.remove("modal-open");
+  }, []);
+
+  useEffect(() => {
+    return () => document.body.classList.remove("modal-open");
   }, []);
 
   return (
@@ -295,9 +295,9 @@ const Blogs = () => {
             As a student of Information Technology, my software engineering
             journey has been filled with challenges, growth, and major
             milestones. From coding in Assembly Language to launching
-            full-fledged web apps, I've been shaped by every
-            experience—including the shift to online learning during the
-            pandemic. Here's a look back at my major projects and turning
+            full-fledged web apps, I have been shaped by every
+            experience, including the shift to online learning during the
+            pandemic. Here is a look back at my major projects and turning
             points, summarized for reflection and inspiration.
           </motion.p>
         </motion.div>
@@ -322,7 +322,6 @@ const Blogs = () => {
         </motion.div>
       </motion.div>
 
-      {/* Modal with AnimatePresence for smooth transitions */}
       <AnimatePresence>
         {isModalOpen && <BlogModal isOpen={isModalOpen} post={activePost} onClose={closeModal} />}
       </AnimatePresence>

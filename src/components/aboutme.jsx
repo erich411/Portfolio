@@ -176,7 +176,7 @@ const AboutMe = () => {
         <div className="about-content">
           <motion.div className="about-intro" variants={itemVariants}>
             <motion.p className="intro-text">
-              Hi! I'm <span className="highlight">Erich</span>, a 4th-year
+              Hi! I am <span className="highlight">Erich</span>, a 4th-year
               Information Technology student at Western Mindanao State
               University with a passion for software development, system
               troubleshooting, and visual resolution technologies.
@@ -215,7 +215,7 @@ const AboutMe = () => {
               </div>
               <h3>Competitions</h3>
               <p>
-                Participated in Google's Kick Start competition focused on
+                Participated in Google Kick Start competition focused on
                 coding and algorithmic challenges, designed for programmers
                 looking to enhance their problem-solving skills. Achieved
                 Certificate of Participation with bragging rights for my resume.
@@ -298,7 +298,7 @@ const AboutMe = () => {
                   transition={!shouldReduceMotion ? { type: "spring", stiffness: 300 } : {}}
                 >
                   Currently developing a capstone project for matching tutors
-                  with students' needs
+                  with student needs
                 </motion.li>
               </ul>
             </motion.div>

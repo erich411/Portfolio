@@ -1,4 +1,4 @@
-import { motion } from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
 import "../css/hero.css";
 import profileImg from "../assets/erich.jfif";
 import {
@@ -6,11 +6,11 @@ import {
   FaInstagram,
   FaTwitter,
   FaGithub,
-  FaLinkedin,
 } from "react-icons/fa";
 import { Link } from "react-router-dom";
 
 const Hero = () => {
+  const prefersReducedMotion = useReducedMotion();
 
   // Animation variants
   const containerVariants = {
@@ -62,18 +62,6 @@ const Hero = () => {
     },
   };
 
-  const pulseVariants = {
-    animate: {
-      scale: [1, 1.05, 1],
-      opacity: [0.7, 1, 0.7],
-      transition: {
-        duration: 2,
-        repeat: Infinity,
-        repeatType: "loop",
-      },
-    },
-  };
-
   return (
     <section className="hero">
       <div className="hero-bg-shape"></div>
@@ -86,7 +74,7 @@ const Hero = () => {
       >
         <div className="hero-text">
           <motion.span className="hero-greeting" variants={itemVariants}>
-            Hello, I'm
+            Hello, I am
           </motion.span>
 
           <motion.h1 variants={itemVariants}>
@@ -107,21 +95,19 @@ const Hero = () => {
           </motion.p>
 
           <motion.div className="hero-buttons" variants={itemVariants}>
-            <motion.button
-              className="hero-btn primary"
+            <motion.div
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
             >
-              <Link to="/projects" className="w">View My Work</Link>
-            </motion.button>
+              <Link to="/projects" className="hero-btn primary">View My Work</Link>
+            </motion.div>
 
-            <motion.button
-              className="hero-btn secondary"
+            <motion.div
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
             >
-              <Link className="links" to="/contacts">Contact Me</Link>
-            </motion.button>
+              <Link className="hero-btn secondary" to="/contacts">Contact Me</Link>
+            </motion.div>
           </motion.div>
 
           <motion.div className="hero-socials" variants={socialVariants}>
@@ -131,11 +117,10 @@ const Hero = () => {
               rel="noopener noreferrer"
               variants={iconVariants}
               whileHover="hover"
+              aria-label="GitHub"
             >
               <FaGithub className="social-icon" />
             </motion.a>
-
-            
 
             <motion.a
               href="https://x.com/Remyuy12"
@@ -143,6 +128,7 @@ const Hero = () => {
               rel="noopener noreferrer"
               variants={iconVariants}
               whileHover="hover"
+              aria-label="Twitter / X"
             >
               <FaTwitter className="social-icon" />
             </motion.a>
@@ -153,6 +139,7 @@ const Hero = () => {
               rel="noopener noreferrer"
               variants={iconVariants}
               whileHover="hover"
+              aria-label="Instagram"
             >
               <FaInstagram className="social-icon" />
             </motion.a>
@@ -163,6 +150,7 @@ const Hero = () => {
               rel="noopener noreferrer"
               variants={iconVariants}
               whileHover="hover"
+              aria-label="Facebook"
             >
               <FaFacebook className="social-icon" />
             </motion.a>
@@ -177,16 +165,12 @@ const Hero = () => {
         variants={profileVariants}
       >
         <motion.div className="image-wrapper">
-          <motion.div
-            className="image-background"
-            animate={{ rotate: 360 }}
-            transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
-          ></motion.div>
+          <div className="image-background"></div>
           <motion.img
             src={profileImg}
             alt="Erich Ramos"
-            whileHover={{ scale: 1.05 }}
-            transition={{ type: "spring", stiffness: 300 }}
+            whileHover={prefersReducedMotion ? undefined : { scale: 1.03 }}
+            transition={{ type: "spring", stiffness: 260, damping: 22 }}
           />
         </motion.div>
       </motion.div>
