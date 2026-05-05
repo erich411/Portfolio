@@ -1,6 +1,6 @@
 import { motion, useReducedMotion } from "framer-motion";
 import "../css/hero.css";
-import profileImg from "../assets/erich.jfif";
+import profileImg from "../assets/hero.jpg";
 import {
   FaFacebook,
   FaInstagram,
