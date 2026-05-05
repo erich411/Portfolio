@@ -1,277 +1,178 @@
-import { motion, AnimatePresence } from "framer-motion";
+import { memo } from "react";
+import { motion, useReducedMotion } from "framer-motion";
 import "../css/blogs.css";
-import { useState, useEffect, useCallback, memo, lazy, Suspense } from "react";
-import blog1 from "../assets/1.png";
-import blog2 from "../assets/2.png";
-import blog3 from "../assets/pandemic.jpg";
-import blog4 from "../assets/4.jpg";
-import blog5 from "../assets/5.png";
-import blog6 from "../assets/6.jpg";
-import blog7 from "../assets/7.png";
 
-// Memoized blog card component to prevent unnecessary re-renders
-const BlogCard = memo(({ post, openModal, variants }) => {
+import day1Photo1 from "../assets/day1/day1.png";
+import day1Photo2 from "../assets/day1/day1.1.png";
+import day2Photo1 from "../assets/day2/day2.png";
+import day2Photo2 from "../assets/day2/day2.1.png";
+import day3Photo1 from "../assets/day3/day3.png";
+import day3Photo2 from "../assets/day3/day3.1.png";
+import day4Photo1 from "../assets/day4/day4.png";
+import day4Photo2 from "../assets/day4/day4.1.png";
+import day5Photo1 from "../assets/day5/day5.png";
+import day5Photo2 from "../assets/day5/day5.1.png";
+import day6Photo1 from "../assets/day6/day6.png";
+import day6Photo2 from "../assets/day6/day6.1.png";
+import day7Photo1 from "../assets/day7/day7.png";
+
+const tourBlogs = [
+  {
+    day: 1,
+    title: "Strolling Manila",
+    summary:
+      "We explored Manila throughout the day and visited Rizal Park in the afternoon. I saw tall buildings, clean streets, and public spaces that showed a different side of the city.",
+    learnings:
+      "I learned that greatness often comes with sacrifice. Jose Rizal gave his life for peace and for the Filipino people, yet he was accused of rebellion and executed.",
+    reflection:
+      "One of the most meaningful parts of my experience was visiting Rizal Park. Standing in a place where history unfolded made me reflect on the sacrifices of national heroes, especially Jose Rizal.",
+    images: [day1Photo1, day1Photo2],
+  },
+  {
+    day: 2,
+    title: "Learning Mechanics",
+    summary:
+      "At Hytec and OpenText, I tested equipment and gained new knowledge about machines, future technologies, and possible career paths for students.",
+    learnings:
+      "I learned that new technologies can be useful for the future, but they can also change the workforce because robots and automation may replace some human jobs.",
+    reflection:
+      "Discovering new things inside the companies was refreshing. The visits helped me enjoy learning while thinking more seriously about my future career.",
+    images: [day2Photo1, day2Photo2],
+  },
+  {
+    day: 3,
+    title: "Discovering Opportunities in Manila's IT Industry",
+    summary:
+      "We toured Teleperformance and explored different areas of the company. At MMDA, we observed how traffic is monitored and how each lane is watched and managed.",
+    learnings:
+      "I learned that every step and decision can matter, especially in busy environments. Being careful and aware can help prevent danger and lead to better outcomes.",
+    reflection:
+      "I noticed how teams work together to solve real-world problems using modern technologies. Developers, designers, and system administrators all play important roles, and their coordination is essential for success.",
+    images: [day3Photo1, day3Photo2],
+  },
+  {
+    day: 4,
+    title: "Another Day, Another Discovery",
+    summary:
+      "Toppeg gave us the opportunity to draw our own characters, while Microsourcing shared insights about how jobs can follow different paths in the industry.",
+    learnings:
+      "I learned that creating a good animated character and producing multiple frames per second can be difficult, tiring, and limited by available resources.",
+    reflection:
+      "My exposure to IT companies in Manila gave me excitement and a sense of responsibility. It helped me understand what is expected in the industry and encouraged me to prepare academically and professionally.",
+    images: [day4Photo1, day4Photo2],
+  },
+  {
+    day: 5,
+    title: "Enjoying the Life",
+    summary:
+      "At People's Park, we learned how rigorous training helps soldiers become brave, strong, and disciplined both emotionally and physically. We also visited statues and other meaningful places.",
+    learnings:
+      "Visiting different places helps build a broader perspective by showing different cultures, environments, and ways of life. These experiences deepen appreciation for history and local traditions.",
+    reflection:
+      "Visiting different places gave me a deeper understanding of how much there is to learn beyond the classroom. Each place offered something unique, whether culture, history, or how people live and work.",
+    images: [day5Photo1, day5Photo2],
+  },
+  {
+    day: 6,
+    title: "Coldest Days and Hottest Nights",
+    summary:
+      "We bought souvenirs for our families and spent time sightseeing at Bell Church and the Strawberry Farm.",
+    learnings:
+      "These visits can inspire people to pursue goals and explore opportunities, especially in their chosen career paths. Learning through exposure makes every visit meaningful and impactful.",
+    reflection:
+      "Visiting new places contributed to my personal growth by building confidence and independence. It also motivated me to explore more opportunities for my future.",
+    images: [day6Photo1, day6Photo2],
+  },
+  {
+    day: 7,
+    title: "The View of Great Places",
+    summary:
+      "On the last day of the tour, we visited many beautiful places, took pictures, rode a horse, and rested in our dorms before our flight.",
+    learnings:
+      "I noticed that unfamiliar places challenged me to step out of my comfort zone. I had to adjust to new environments, communicate with different people, and become more aware of my surroundings.",
+    reflection:
+      "I learned the value of time and opportunity. Not everyone gets to visit different places, so I became more mindful of every moment and more motivated to use opportunities that help me grow personally and professionally.",
+    images: [day7Photo1],
+  },
+];
+
+const sectionVariants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: { staggerChildren: 0.14, delayChildren: 0.08 },
+  },
+};
+
+const cardVariants = {
+  hidden: { y: 28, opacity: 0 },
+  visible: {
+    y: 0,
+    opacity: 1,
+    transition: { duration: 0.5, ease: "easeOut" },
+  },
+};
+
+const BlogGallery = memo(function BlogGallery({ day, title, images }) {
   return (
-    <motion.div
-      className="blog-card"
-      variants={variants}
-      whileHover={{
-        scale: 1.03,
-        transition: { duration: 0.3 },
-        boxShadow: "0 20px 40px rgba(0, 0, 0, 0.12)",
-      }}
-    >
-      <div className="card-image">
-        <img 
-          src={post.image} 
-          alt={post.title}
-          loading="lazy" // Lazy load images
-          width="400" 
-          height="200"
-        />
-        <motion.div
-          className="category-badge"
-          whileHover={{ scale: 1.1 }}
-        >
-          {post.category}
-        </motion.div>
-      </div>
-      <div className="card-content">
-        <div className="post-date">{post.date}</div>
-        <h2>{post.title}</h2>
-        <motion.button
-          className="read-more"
-          whileHover={{ scale: 1.05, backgroundColor: "#4f46e5" }}
-          whileTap={{ scale: 0.95 }}
-          onClick={() => openModal(post)}
-        >
-          Read
-        </motion.button>
-      </div>
-    </motion.div>
+    <div className={`tour-gallery ${images.length === 1 ? "single-photo" : ""}`}>
+      {images.map((image, index) => (
+        <figure className="tour-photo" key={image}>
+          <img
+            src={image}
+            alt={`Day ${day} ${title} photo ${index + 1}`}
+            loading="lazy"
+            width="640"
+            height="420"
+          />
+        </figure>
+      ))}
+    </div>
   );
 });
 
-// Modal component extracted and can be lazy loaded
-const BlogModal = ({ isOpen, post, onClose }) => {
-  if (!isOpen) return null;
-  
+const BlogEntry = memo(function BlogEntry({ blog, index, reduceMotion }) {
+  const align = index % 2 === 0 ? "left" : "right";
+
   return (
-    <motion.div 
-      className="modal-overlay" 
-      onClick={onClose}
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      exit={{ opacity: 0 }}
+    <motion.article
+      className={`tour-card align-${align}`}
+      variants={cardVariants}
+      whileHover={reduceMotion ? undefined : { y: -6 }}
     >
-      <motion.div 
-        className="modal-container" 
-        onClick={(e) => e.stopPropagation()}
-        initial={{ y: 50, opacity: 0 }}
-        animate={{ y: 0, opacity: 1 }}
-        exit={{ y: 50, opacity: 0 }}
-      >
-        <div className="modal-header">
-          <h2>{post?.title}</h2>
-          <button className="close-modal" onClick={onClose}>
-            ×
-          </button>
+      <div className="tour-marker" aria-hidden="true">
+        <span>{String(blog.day).padStart(2, "0")}</span>
+      </div>
+
+      <div className="tour-card-body">
+        <div className="tour-copy">
+          <div className="tour-eyebrow">Day {blog.day}</div>
+          <h2>{blog.title}</h2>
+
+          <div className="tour-notes">
+            <section>
+              <h3>Summary of Activities</h3>
+              <p>{blog.summary}</p>
+            </section>
+            <section>
+              <h3>Key Learnings</h3>
+              <p>{blog.learnings}</p>
+            </section>
+            <section>
+              <h3>Personal Reflection</h3>
+              <p>{blog.reflection}</p>
+            </section>
+          </div>
         </div>
-        <div className="modal-content">
-          <h3>{post?.content.heading}</h3>
-          <ul className="content-list">
-            {post?.content.points.map((point, index) => (
-              <li key={index}>{point}</li>
-            ))}
-          </ul>
-        </div>
-      </motion.div>
-    </motion.div>
+
+        <BlogGallery day={blog.day} title={blog.title} images={blog.images} />
+      </div>
+    </motion.article>
   );
-};
+});
 
 const Blogs = () => {
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [activePost, setActivePost] = useState(null);
-  const [isMobile, setIsMobile] = useState(false);
-
-  // Check for mobile device
-  useEffect(() => {
-    const checkMobile = () => {
-      setIsMobile(window.innerWidth <= 768);
-    };
-    
-    // Initial check
-    checkMobile();
-    
-    // Add event listener
-    window.addEventListener('resize', checkMobile);
-    
-    // Cleanup
-    return () => window.removeEventListener('resize', checkMobile);
-  }, []);
-
-  // Simplified animations for mobile
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        staggerChildren: isMobile ? 0.1 : 0.3,
-        delayChildren: 0.1,
-      },
-    },
-  };
-
-  const itemVariants = {
-    hidden: { y: 20, opacity: 0 },
-    visible: {
-      y: 0,
-      opacity: 1,
-      transition: { duration: isMobile ? 0.3 : 0.6, ease: "easeOut" },
-    },
-  };
-
-  const fadeInVariants = {
-    hidden: { opacity: 0 },
-    visible: { opacity: 1, transition: { duration: 0.5 } },
-  };
-
-  const blogPosts = [
-    {
-      id: 1,
-      title: "Software Engineering",
-      date: "April 15, 2024",
-      category: "Blog 1",
-      image: blog1,
-      content: {
-        heading: "Software Engineering Core Learnings",
-        points: [
-          "Learned systematic approaches to problem-solving and project development.",
-          "Understood the Software Development Life Cycle (SDLC) from planning to maintenance.",
-          "Applied Agile methodology in team-based and solo projects.",
-          "Strengthened skills in debugging, version control (Git), and documentation.",
-        ],
-      },
-    },
-    {
-      id: 2,
-      title: "CAPSTONE",
-      date: "March 22, 2024",
-      category: "Blog 2",
-      image: blog2,
-      content: {
-        heading: '"TUTORIA" — Finding the Right Tutor',
-        points: [
-          "Developed a web app to match students with tutors based on purpose and preference.",
-          "Features included real-time chat, profile ratings, and scheduling.",
-          "Used React.js for the frontend and JSON Server as a mock backend.",
-          "Focused on UX design to ensure accessibility and ease of use for students.",
-        ],
-      },
-    },
-    {
-      id: 3,
-      title: "PANDEMIC",
-      date: "February 10, 2024",
-      category: "Blog 3",
-      image: blog3,
-      content: {
-        heading: "Pandemic Era & Online Learning: Adaptation Through Tech",
-        points: [
-          "Transitioned to fully online learning using laptops and smartphones.",
-          "Mastered tools like Google Meet, Zoom, Microsoft Teams, and LMS platforms.",
-          "Learned to manage time, self-study, and collaborate remotely on group projects.",
-          "Realized the critical role of tech in education accessibility and resilience.",
-        ],
-      },
-    },
-    {
-      id: 4,
-      title: "ECOMMERCE",
-      date: "February 10, 2024",
-      category: "Blog 4",
-      image: blog4,
-      content: {
-        heading: "E-commerce Website Development",
-        points: [
-          "Built a functional e-commerce site with shopping cart and product management.",
-          "Integrated payment simulation and basic admin panel.",
-          "Utilized HTML/CSS/JavaScript, and PHP with MySQL for backend.",
-          "Learned about security (e.g., input validation) and database normalization.",
-        ],
-      },
-    },
-    {
-      id: 5,
-      title: "Application Development",
-      date: "February 10, 2024",
-      category: "Blog 5",
-      image: blog5,
-      content: {
-        heading: "Application Development Highlights",
-        points: [
-          "Created a mobile-friendly Pokédex app using React and PokéAPI.",
-          "Designed and implemented CRUD applications using Firebase and Node.js.",
-          "Explored Android app development using Java and XML in Android Studio.",
-          "Focused on responsive design and performance optimization.",
-        ],
-      },
-    },
-    {
-      id: 6,
-      title: "ASSEMBLY CODING DAYS",
-      date: "February 10, 2024",
-      category: "Blog 6",
-      image: blog6,
-      content: {
-        heading: "Throwback to Assembly Language Days",
-        points: [
-          "Wrote low-level code to understand how computers process instructions.",
-          "Used MASM and TASM to create simple arithmetic and control-flow programs.",
-          "Gained deep appreciation for higher-level languages after dealing with registers and memory.",
-        ],
-      },
-    },
-    {
-      id: 7,
-      title: "PORTFOLIO",
-      date: "February 10, 2024",
-      category: "Blog 7",
-      image: blog7,
-      content: {
-        heading: "My Very Last Portfolio — A Summary of My Work",
-        points: [
-          'Capstone Project – "TutorMatch": Matchmaking platform for students and tutors.',
-          "E-commerce Website – Fully functional shopping platform with backend logic.",
-          "Pandemic-Era Adaptations – Transition to remote learning and tech reliance.",
-          "Pokédex App – Interactive battle app using PokéAPI (React + JSON Server)",
-          "Assembly Language Programs – Arithmetic, loops, and conditionals in low-level code.",
-          "Android App Project – Basic mobile utilities and UI features.",
-          "Design Portfolio – Includes UI mockups, wireframes, and prototypes (Figma).",
-          "GitHub Repository – Hosted source codes, commits, and documentation of all major projects.",
-          "Personal Website (Portfolio) – Final showcase with links to live projects and demos.",
-        ],
-      },
-    },
-  ];
-
-  const openModal = useCallback((post) => {
-    setActivePost(post);
-    setIsModalOpen(true);
-    // Prevent scrolling when modal is open
-    document.body.style.overflow = "hidden";
-  }, []);
-
-  const closeModal = useCallback(() => {
-    setIsModalOpen(false);
-    // Add a small delay before removing the post to allow exit animation
-    setTimeout(() => {
-      setActivePost(null);
-    }, 300);
-    // Re-enable scrolling when modal is closed
-    document.body.style.overflow = "auto";
-  }, []);
+  const reduceMotion = useReducedMotion();
 
   return (
     <section className="blogs" id="blogs">
@@ -279,53 +180,30 @@ const Blogs = () => {
         className="blogs-container"
         initial="hidden"
         whileInView="visible"
-        viewport={{ once: true, amount: 0.1 }}
-        variants={containerVariants}
+        viewport={{ once: true, amount: 0.08 }}
+        variants={sectionVariants}
       >
-        <motion.div className="blogs-header" variants={itemVariants}>
-          <h1>My Blog</h1>
+        <motion.header className="blogs-header" variants={cardVariants}>
+          <p className="blogs-kicker">7-day educational tour</p>
+          <h1>Tour Blog</h1>
           <div className="underline"></div>
-        </motion.div>
+          <p>
+            A day-by-day reflection on the places, companies, lessons, and
+            memorable moments from our educational tour.
+          </p>
+        </motion.header>
 
-        <motion.div className="blogs-intro" variants={itemVariants}>
-          <motion.p
-            variants={itemVariants}
-            whileHover={!isMobile ? { scale: 1.02, transition: { duration: 0.2 } } : {}}
-          >
-            As a student of Information Technology, my software engineering
-            journey has been filled with challenges, growth, and major
-            milestones. From coding in Assembly Language to launching
-            full-fledged web apps, I've been shaped by every
-            experience—including the shift to online learning during the
-            pandemic. Here's a look back at my major projects and turning
-            points, summarized for reflection and inspiration.
-          </motion.p>
-        </motion.div>
-
-        <motion.div className="blogs-grid" variants={fadeInVariants}>
-          {blogPosts.map((post) => (
-            <BlogCard key={post.id} post={post} openModal={openModal} variants={itemVariants} />
+        <motion.div className="tour-timeline" variants={sectionVariants}>
+          {tourBlogs.map((blog, index) => (
+            <BlogEntry
+              key={blog.day}
+              blog={blog}
+              index={index}
+              reduceMotion={reduceMotion}
+            />
           ))}
         </motion.div>
-
-        <motion.div className="blogs-intro" variants={itemVariants}>
-          <motion.p
-            variants={itemVariants}
-            whileHover={!isMobile ? { scale: 1.02, transition: { duration: 0.2 } } : {}}
-          >
-            This journey has taught me not just how to code, but how to think,
-            adapt, and build with purpose. Whether it was learning Assembly
-            Language or launching a full React app, every phase was a stepping
-            stone toward becoming a confident developer ready for the real
-            world.
-          </motion.p>
-        </motion.div>
       </motion.div>
-
-      {/* Modal with AnimatePresence for smooth transitions */}
-      <AnimatePresence>
-        {isModalOpen && <BlogModal isOpen={isModalOpen} post={activePost} onClose={closeModal} />}
-      </AnimatePresence>
     </section>
   );
 };
